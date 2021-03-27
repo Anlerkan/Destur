@@ -40,7 +40,7 @@ describe('tests validity of email input', () => {
  *    - One upper-case letter
  *    - At least 1 digit
  */
-describe('testS validity of password input', () => {
+describe('tests validity of password input', () => {
   let email = '';
 
   beforeAll(() => {
