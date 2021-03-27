@@ -17,7 +17,8 @@ module.exports = {
             {
                 avoidEscape: true, allowTemplateLiterals: false
             }
-        ]
+        ],
+        "import/prefer-default-export": "off"
     },
     ignorePatterns: ['.eslintrc.js'],
 };
