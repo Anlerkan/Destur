@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "prettier": "prettier --write src/**/*.ts",
-    "prettier:fix": "echo fixing Prettier formatting",
+    "prettier": "prettier --check src/**/*.ts",
+    "prettier:fix": "prettier --fix src/**/*.ts",
     "start:dev": "nodemon src/index.ts",
     "start": "",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -34,7 +34,7 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "eslint .", "prettier --write ." ,"git add"
+      "npm run prettier" ,"npm run lint" ,"git add"
     ]
   },
   "husky": {
