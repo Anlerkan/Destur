@@ -1,4 +1,5 @@
 import mongoose, { HookNextFunction } from 'mongoose';
+import { DuplicatedEmail } from '../errors';
 
 export type UserDocument = mongoose.Document & {
   email: string;
@@ -23,7 +24,7 @@ userSchema.pre('save', async function preSaveFunction(this: UserDocument, next: 
   const existingUser = await User.findOne({ email: this.email });
 
   if (existingUser) {
-    throw new Error('Email is already in the database');
+    throw new DuplicatedEmail();
   }
 
   next();
