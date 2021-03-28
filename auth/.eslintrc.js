@@ -19,7 +19,8 @@ module.exports = {
             }
         ],
         "import/prefer-default-export": "off",
-        "@typescript-eslint/no-empty-interface": "off"
+        "@typescript-eslint/no-empty-interface": "off",
+        "no-underscore-dangle": ["error", { "allow": ["_id"] }]
     },
     ignorePatterns: ['.eslintrc.js'],
 };
