@@ -1,7 +1,7 @@
 {
   "name": "auth",
   "version": "1.0.0",
-  "description": "Authentication microservice",
+  "description": "Destur",
   "main": "./src/index.ts",
   "scripts": {
     "lint": "eslint src/**/*.ts",
