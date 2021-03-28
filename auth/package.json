@@ -1,7 +1,7 @@
 {
   "name": "auth",
   "version": "1.0.0",
-  "description": "Authentication microservice for our social media app",
+  "description": "Authentication microservice",
   "main": "./src/index.ts",
   "scripts": {
     "lint": "eslint src/**/*.ts",
