@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { HookNextFunction } from 'mongoose';
 
 export type UserDocument = mongoose.Document & {
   email: string;
@@ -16,6 +16,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+});
+
+userSchema.pre('save', async function preSaveFunction(this: UserDocument, next: HookNextFunction) {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const existingUser = await User.findOne({ email: this.email });
+
+  if (existingUser) {
+    throw new Error('Email is already in the database');
+  }
+
+  next();
 });
 
 const User = mongoose.model<UserDocument, UserModel>('User', userSchema);
