@@ -9,7 +9,7 @@ export default class InvalidInput extends BaseCustomError {
 
   protected errors: ValidationError[] | undefined;
 
-  private errorMessage = 'User input is not valid';
+  protected defaultErrorMessage = 'User input is not valid';
 
   serializedErrorOutput = undefined;
 
@@ -44,7 +44,7 @@ export default class InvalidInput extends BaseCustomError {
     return {
       errors: [
         {
-          message: this.errorMessage,
+          message: this.defaultErrorMessage,
           fields: parsedErrors
         }
       ]
