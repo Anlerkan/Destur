@@ -18,7 +18,8 @@ module.exports = {
                 avoidEscape: true, allowTemplateLiterals: false
             }
         ],
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/no-empty-interface": "off"
     },
     ignorePatterns: ['.eslintrc.js'],
 };
