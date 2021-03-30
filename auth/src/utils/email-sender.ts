@@ -9,8 +9,14 @@ export type EmailSenderSendEmailResponse = {
   status: 'success' | 'error';
 };
 
+export type EmailSenderEmailApi = {
+  sendEmail: () => void;
+};
+
 export default class EmailSender {
   private isActive = false;
+
+  private emailApi: EmailSenderEmailApi | undefined;
 
   private static emailSenderInstance: EmailSender;
 
@@ -22,6 +28,10 @@ export default class EmailSender {
       this.emailSenderInstance = new EmailSender();
     }
     return this.emailSenderInstance;
+  }
+
+  activate(): void {
+    this.isActive = true;
   }
 
   deactivate(): void {
@@ -37,6 +47,10 @@ export default class EmailSender {
   private validateEmailSender(): void {
     if (!this.isActive) {
       throw new Error('EmailSender is not active');
+    }
+
+    if (!this.emailApi) {
+      throw new Error('EmailApi is not set');
     }
   }
 }
