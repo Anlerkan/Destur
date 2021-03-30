@@ -1,5 +1,6 @@
 import mongoose, { HookNextFunction } from 'mongoose';
 import { DuplicatedEmail } from '../errors';
+import { PasswordHash } from '../utils';
 
 export type UserDocument = mongoose.Document & {
   email: string;
@@ -19,12 +20,25 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.pre('save', async function preSaveFunction(this: UserDocument, next: HookNextFunction) {
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const existingUser = await User.findOne({ email: this.email });
+userSchema.pre(
+  'save',
+  async function validateUniqueness(this: UserDocument, next: HookNextFunction) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const existingUser = await User.findOne({ email: this.email });
 
-  if (existingUser) {
-    throw new DuplicatedEmail();
+    if (existingUser) {
+      throw new DuplicatedEmail();
+    }
+
+    next();
+  }
+);
+
+userSchema.pre('save', async function hashPassword(this: UserDocument, next: HookNextFunction) {
+  if (this.isModified('password')) {
+    const hashedPassword = PasswordHash.toHashSync({ password: this.get('password') });
+
+    this.set('password', hashedPassword);
   }
 
   next();

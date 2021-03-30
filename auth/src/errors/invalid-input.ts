@@ -1,5 +1,5 @@
 import { ValidationError } from 'express-validator';
-import { BaseCustomError } from './base-custom-error';
+import BaseCustomError from './base-custom-error';
 import { SerializedErrorOutput, SerializedErrorField } from './types/serialized-error-output';
 
 export type InvalidInputConstructorErrorsParam = ValidationError[];
