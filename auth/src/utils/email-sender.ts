@@ -8,7 +8,7 @@ export type EmailApiSendEmailResponse = {
 };
 
 export interface EmailSenderEmailApi {
-  sendEmail: (args: EmailApiSendEmailArgs) => Promise<EmailApiSendEmailResponse>;
+  sendSignupVerificationEmail: (args: EmailApiSendEmailArgs) => Promise<EmailApiSendEmailResponse>;
 }
 
 export default class EmailSender implements EmailSenderEmailApi {
@@ -40,11 +40,13 @@ export default class EmailSender implements EmailSenderEmailApi {
     this.emailApi = emailApi;
   }
 
-  async sendEmail(args: EmailApiSendEmailArgs): Promise<EmailApiSendEmailResponse> {
+  async sendSignupVerificationEmail(
+    args: EmailApiSendEmailArgs
+  ): Promise<EmailApiSendEmailResponse> {
     this.validateEmailSender();
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.emailApi!.sendEmail(args);
+    return this.emailApi!.sendSignupVerificationEmail(args);
   }
 
   private validateEmailSender(): void {
