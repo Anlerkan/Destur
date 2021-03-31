@@ -1,24 +1,14 @@
-export type EmailApiSendEmailArgs = {
-  toEmail: string;
-};
-
-export type EmailApiSendEmailResponse = {
-  toEmail: string;
-  status: 'success' | 'error';
-};
-
-export interface IEmailSender {
-  sendSignupVerificationEmail: (args: EmailApiSendEmailArgs) => Promise<EmailApiSendEmailResponse>;
-}
-
-export interface IEmailSenderEmailApi extends IEmailSender {
-  sendEmail: () => void;
-}
+import {
+  IEmailSender,
+  EmailApiSendEmailArgs,
+  EmailApiSendEmailResponse,
+  EmailSenderEmailApi
+} from './types';
 
 export default class EmailSender implements IEmailSender {
   private isActive = false;
 
-  private emailApi: IEmailSender | undefined;
+  private emailApi: EmailSenderEmailApi | undefined;
 
   private static emailSenderInstance: EmailSender;
 
@@ -44,7 +34,7 @@ export default class EmailSender implements IEmailSender {
     this.isActive = false;
   }
 
-  setEmailApi(emailApi: IEmailSender): void {
+  setEmailApi(emailApi: EmailSenderEmailApi): void {
     this.emailApi = emailApi;
   }
 
