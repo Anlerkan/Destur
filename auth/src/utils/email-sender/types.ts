@@ -16,5 +16,5 @@ export abstract class EmailSenderEmailApi implements IEmailSender {
     args: EmailApiSendEmailArgs
   ): Promise<EmailApiSendEmailResponse>;
 
-  protected abstract sendEmail(): void;
+  protected abstract sendEmail(args: EmailApiSendEmailArgs): void;
 }
