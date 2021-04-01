@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 import { EmailApiSendEmailArgs, EmailApiSendEmailResponse, EmailApi } from './types';
-import NodeMailerAppSmtpServer from './nodemailer-app-smtp-server';
+import NodeMailerAppSmtpServer from './nodemailer-smtp-server';
 
 export default class NodemailerEmailApi implements EmailApi {
   private transporter: Mail;

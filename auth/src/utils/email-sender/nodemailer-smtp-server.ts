@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { SmptServer, SmptServerConfig } from './types';
 
 export default class NodeMailerAppSmtpServer implements SmptServer {
-  private host = 'localhost';
+  private host = process.env.SMTP_HOST!;
 
-  private port = 1025;
+  // eslint-disable-next-line radix
+  private port = parseInt(process.env.SMTP_PORT!);
 
-  private user = 'project.1';
+  private user = process.env.SMTP_APIKEY_PUBLIC!;
 
-  private pass = 'secret.1';
+  private pass = process.env.SMTP_APIKEY_PRIVATE!;
 
   getConfig(): SmptServerConfig {
     return {
