@@ -7,14 +7,6 @@ export type EmailApiSendEmailResponse = {
   status: 'success' | 'error';
 };
 
-export interface IEmailSender {
-  sendSignupVerificationEmail: (args: EmailApiSendEmailArgs) => Promise<EmailApiSendEmailResponse>;
-}
-
-export abstract class EmailSenderEmailApi implements IEmailSender {
-  abstract sendSignupVerificationEmail(
-    args: EmailApiSendEmailArgs
-  ): Promise<EmailApiSendEmailResponse>;
-
-  protected abstract sendEmail(args: EmailApiSendEmailArgs): void;
+export interface EmailApi {
+  sendSignupVerificationEmail(args: EmailApiSendEmailArgs): Promise<EmailApiSendEmailResponse>;
 }

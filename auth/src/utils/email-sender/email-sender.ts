@@ -1,14 +1,9 @@
-import {
-  IEmailSender,
-  EmailApiSendEmailArgs,
-  EmailApiSendEmailResponse,
-  EmailSenderEmailApi
-} from './types';
+import { EmailApi, EmailApiSendEmailArgs, EmailApiSendEmailResponse } from './types';
 
-export default class EmailSender implements IEmailSender {
+export default class EmailSender implements EmailApi {
   private isActive = false;
 
-  private emailApi: EmailSenderEmailApi | undefined;
+  private emailApi: EmailApi | undefined;
 
   private static emailSenderInstance: EmailSender;
 
@@ -34,7 +29,7 @@ export default class EmailSender implements IEmailSender {
     this.isActive = false;
   }
 
-  setEmailApi(emailApi: EmailSenderEmailApi): void {
+  setEmailApi(emailApi: EmailApi): void {
     this.emailApi = emailApi;
   }
 
