@@ -3,10 +3,19 @@ import request from 'supertest';
 import app from '../../app';
 import { SIGNUP_ROUTE } from '../signup';
 import { User } from '../../models';
+import { EmailSender } from '../../utils';
+import { MockEmailApi } from '../../test-utils/mock-email-api';
 
 // it('should return a 405 for non-post request to the signup route', () => {
 
 // });
+
+beforeEach(() => {
+  const emailSender = EmailSender.getInstance();
+
+  emailSender.activate();
+  emailSender.setEmailApi(new MockEmailApi());
+});
 
 /*
  *  Valid email conditions:
