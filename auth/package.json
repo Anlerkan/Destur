@@ -9,7 +9,7 @@
     "prettier:fix": "prettier --write .",
     "start:dev": "nodemon src/index.ts",
     "start": "",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watchAll --no-cache"
   },
   "jest": {

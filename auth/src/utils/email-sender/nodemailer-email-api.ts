@@ -2,19 +2,13 @@ import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 import { EmailApiSendEmailArgs, EmailApiSendEmailResponse, EmailApi } from './types';
+import NodeMailerAppSmtpServer from './nodemailer-app-smtp-server';
 
 export default class NodemailerEmailApi implements EmailApi {
   private transporter: Mail;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: 'localhost',
-      port: 1025,
-      auth: {
-        user: 'project.1',
-        pass: 'secret.1'
-      }
-    });
+    this.transporter = nodemailer.createTransport(new NodeMailerAppSmtpServer().getConfig());
   }
 
   async sendSignupVerificationEmail(
