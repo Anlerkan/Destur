@@ -3,6 +3,7 @@ import { body, validationResult } from 'express-validator';
 import { User } from '../models';
 import { InvalidInput, DuplicatedEmail } from '../errors';
 import { UserSignedUp } from '../events';
+import { EmailSender } from '../utils';
 
 export const SIGNUP_ROUTE = '/api/auth/signup/';
 
@@ -57,6 +58,11 @@ signUpRouter.post(
     try {
       const newUser = await User.create({ email, password });
       const userSignedUpEvent = new UserSignedUp(newUser);
+      const emailSender = EmailSender.getInstance();
+
+      emailSender.sendSignupVerificationEmail({
+        toEmail: newUser.email
+      });
 
       return res.status(userSignedUpEvent.getStatusCode()).send(userSignedUpEvent.serializeRest());
     } catch (e) {
