@@ -4,7 +4,7 @@ import app from '../../app';
 import { SIGNUP_ROUTE } from '../signup';
 import { User } from '../../models';
 import { EmailSender } from '../../utils';
-import { MockEmailApi } from '../../test-utils/mock-email-api';
+import { MockEmailApi, mockSendSignupVerificationEmail } from '../../test-utils/mock-email-api';
 
 // it('should return a 405 for non-post request to the signup route', () => {
 
@@ -147,5 +147,17 @@ describe('tests saving the signed up user to database', () => {
 
     expect(newUserPassword.length).toBeGreaterThan(0);
     expect(newUserPassword).not.toEqual(validUserInfo.password);
+  });
+});
+
+describe('tests the email verification behavior on signup', () => {
+  const validUserInfo = {
+    email: 'test@test.com',
+    password: 'Valid123'
+  };
+
+  it('triggers the sendSignupVerificationEmail method from the EmailSender', async () => {
+    await request(app).post(SIGNUP_ROUTE).send(validUserInfo).expect(201);
+    expect(mockSendSignupVerificationEmail).toHaveBeenCalledTimes(1);
   });
 });

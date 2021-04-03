@@ -10,7 +10,7 @@
     "start:dev": "nodemon src/index.ts",
     "start": "",
     "test": "jest",
-    "test:watch": "jest --watchAll --no-cache"
+    "test:watch": "jest --verbose --watchAll --no-cache"
   },
   "jest": {
     "testEnvironment": "node",

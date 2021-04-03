@@ -1,9 +1,5 @@
 import { EmailSender } from '../../index';
-import {
-  MockEmailApi,
-  mockSendSignupVerificationEmail,
-  mockSendEmail
-} from '../../../test-utils/mock-email-api';
+import { MockEmailApi, mockSendSignupVerificationEmail } from '../../../test-utils/mock-email-api';
 
 it('should throw an error when sending an email if the EmailSender is deactivated', async () => {
   const emailSender = EmailSender.getInstance();
@@ -36,5 +32,4 @@ it('should send the signup verification mail if the sender is active and the Ema
 
   expect(res.toEmail).toEqual('test@test.com');
   expect(mockSendSignupVerificationEmail).toHaveBeenCalledTimes(1);
-  expect(mockSendEmail).toHaveBeenCalledTimes(1);
 });

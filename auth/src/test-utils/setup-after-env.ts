@@ -27,6 +27,7 @@ beforeEach(async () => {
   });
 
   EmailSender.resetEmailSenderInstance();
+  jest.clearAllMocks();
 });
 
 //  After all tests
