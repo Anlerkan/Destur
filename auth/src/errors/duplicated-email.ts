@@ -2,9 +2,9 @@ import BaseCustomError from './base-custom-error';
 import { SerializedErrorOutput } from './types/serialized-error-output';
 
 export default class DuplicatedEmail extends BaseCustomError {
-  protected statusCode = 422;
+  private statusCode = 422;
 
-  protected defaultErrorMessage = 'The email is already in the database';
+  private defaultErrorMessage = 'The email is already in the database';
 
   constructor() {
     super();
