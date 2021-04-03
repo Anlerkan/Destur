@@ -8,9 +8,10 @@
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "start:dev": "nodemon src/index.ts",
-    "start": "",
+    "start": "set NODE_ENV=production && ts-node src/index.ts",
     "test": "jest",
-    "test:watch": "jest --verbose --watchAll --no-cache"
+    "test:watch": "jest --verbose --watchAll --no-cache",
+    "tsc:check": "tesc --noEmit"
   },
   "jest": {
     "testEnvironment": "node",
