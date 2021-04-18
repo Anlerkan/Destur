@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { EmailSender } from '../utils';
 
 let mongoMemoryServer: MongoMemoryServer;
+mongoose.set('useFindAndModify', false);
 
 //  Before everything:
 //  1.Create an instance of MongoDB server

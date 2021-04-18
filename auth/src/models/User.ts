@@ -1,4 +1,4 @@
-import mongoose, { HookNextFunction } from 'mongoose';
+import mongoose, { HookNextFunction, UpdateQuery } from 'mongoose';
 import { DuplicatedEmail } from '../errors';
 import { PasswordHash } from '../utils';
 
@@ -25,42 +25,41 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+async function validateUniqueness(userDoc: UserDocument) {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const existingUser = await User.findOne({ email: userDoc.email });
+
+  if (existingUser) {
+    throw new DuplicatedEmail();
+  }
+}
+
+userSchema.pre('save', async function preValidateUniqueness(this: UserDocument) {
+  await validateUniqueness(this);
+});
+
 userSchema.pre(
-  'save',
-  async function validateUniqueness(this: UserDocument, next: HookNextFunction) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const existingUser = await User.findOne({ email: this.email });
-
-    if (existingUser) {
-      throw new DuplicatedEmail();
-    }
-
-    next();
+  /^.*([Uu]pdate).*$/,
+  async function preValidateUniqueness(this: UpdateQuery<UserDocument>) {
+    await validateUniqueness(this._update);
   }
 );
 
-userSchema.pre(
-  'save',
-  async function setIsVerifiedToFalseOnFirstSave(this: UserDocument, next: HookNextFunction) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const existingUser = await User.findOne({ email: this.email });
+userSchema.pre('save', async function setIsVerifiedToFalseOnFirstSave(this: UserDocument) {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const existingUser = await User.findOne({ email: this.email });
 
-    if (!existingUser) {
-      this.set('isVerified', false);
-    }
-
-    next();
+  if (!existingUser) {
+    this.set('isVerified', false);
   }
-);
+});
 
-userSchema.pre('save', async function hashPassword(this: UserDocument, next: HookNextFunction) {
+userSchema.pre('save', async function hashPassword(this: UserDocument) {
   if (this.isModified('password')) {
     const hashedPassword = PasswordHash.toHashSync({ password: this.get('password') });
 
     this.set('password', hashedPassword);
   }
-
-  next();
 });
 
 const User = mongoose.model<UserDocument, UserModel>('User', userSchema);
