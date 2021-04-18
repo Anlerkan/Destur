@@ -16,7 +16,14 @@ const accountVerificationSchema = new mongoose.Schema({
   },
   emailVerificationToken: {
     type: String,
-    required: true
+    required: true,
+    validate: (value: string): boolean => {
+      if (!value || value.length !== 64) {
+        throw new Error('Invalid email verification token');
+      }
+
+      return true;
+    }
   }
 });
 
