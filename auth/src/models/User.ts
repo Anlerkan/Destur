@@ -1,4 +1,4 @@
-import mongoose, { HookNextFunction, UpdateQuery } from 'mongoose';
+import mongoose, { UpdateQuery } from 'mongoose';
 import { DuplicatedEmail } from '../errors';
 import { PasswordHash } from '../utils';
 
