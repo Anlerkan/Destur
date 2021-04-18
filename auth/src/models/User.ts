@@ -34,6 +34,12 @@ async function validateUniqueness(userDoc: UserDocument) {
   }
 }
 
+function hashPassword(newPassword: string): string {
+  const hashedPassword = PasswordHash.toHashSync({ password: newPassword });
+
+  return hashedPassword;
+}
+
 userSchema.pre('save', async function preValidateUniqueness(this: UserDocument) {
   await validateUniqueness(this);
 });
@@ -54,11 +60,19 @@ userSchema.pre('save', async function setIsVerifiedToFalseOnFirstSave(this: User
   }
 });
 
-userSchema.pre('save', async function hashPassword(this: UserDocument) {
-  if (this.isModified('password')) {
-    const hashedPassword = PasswordHash.toHashSync({ password: this.get('password') });
+userSchema.pre('save', function preHashPassword(this: UserDocument) {
+  const newPassword = this.isModified('password') ? this.get('password') : null;
 
-    this.set('password', hashedPassword);
+  if (newPassword) {
+    this.set('password', hashPassword(newPassword));
+  }
+});
+
+userSchema.pre(/^.*([Uu]pdate).*$/, function preHashPassowrd(this: UpdateQuery<UserDocument>) {
+  const newPassword = this._update.password || null;
+
+  if (newPassword) {
+    this._update.password = hashPassword(newPassword);
   }
 });
 

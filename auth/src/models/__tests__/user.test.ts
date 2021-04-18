@@ -3,6 +3,7 @@ import { randomBytes } from 'crypto';
 import { User } from '../index';
 import { BaseCustomError, DuplicatedEmail } from '../../errors';
 import { PasswordHash } from '../../utils';
+import { UserDocument } from '../User';
 
 describe('test the user mongoose model', () => {
   const userInfo = {
@@ -36,6 +37,20 @@ describe('test the user mongoose model', () => {
 
   it('should encrypt the password when creating the user', async () => {
     const newUser = await User.create(userInfo);
+
+    expect(newUser.password).not.toEqual(userInfo.password);
+    expect(newUser.password.split('.')).toHaveLength(2);
+    expect(newUser.password.split('.')[1].length).toEqual(randomBytes(16).toString('hex').length);
+  });
+
+  it('should encrypt the password when the user updates the password', async () => {
+    let newUser = await User.create(userInfo);
+
+    newUser = (await User.findOneAndUpdate(
+      { _id: newUser._id },
+      { password: 'Newvalid123' },
+      { new: true }
+    )) as UserDocument;
 
     expect(newUser.password).not.toEqual(userInfo.password);
     expect(newUser.password.split('.')).toHaveLength(2);
