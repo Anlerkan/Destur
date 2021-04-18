@@ -62,4 +62,23 @@ describe('test the user mongoose model', () => {
 
     expect(newUser.isVerified).toEqual(false);
   });
+
+  it('should set isVerified to false on first save,even if the provided value is set to true', async () => {
+    const newUser = await User.create({ ...userInfo, isVerified: true });
+
+    expect(newUser.isVerified).toEqual(false);
+  });
+
+  it('should allow to change isVerified to true if the user already exists', async () => {
+    const newUser = await User.create(userInfo);
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: newUser._id },
+      { isVerified: true },
+      { new: true }
+    );
+
+    expect(updatedUser).toBeDefined();
+    expect(updatedUser!.isVerified).toEqual(true);
+  });
 });
