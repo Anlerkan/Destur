@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import mongoose from 'mongoose';
 
 import User from './User';
+import { generateEmailVerificationToken } from '../utils/account-verification';
 
 export type AccountVerificationDocument = mongoose.Document & {
   userId: mongoose.Types.ObjectId;
@@ -34,6 +36,24 @@ accountVerificationSchema.pre(
 
     if (!user) {
       throw new Error('User could not be found');
+    }
+  }
+);
+
+accountVerificationSchema.pre(
+  'save',
+  async function enforceTokenUniqueness(this: AccountVerificationDocument) {
+    let existingAccountVerificationDocument = await AccountVerification.findOne({
+      emailVerificationToken: this.emailVerificationToken
+    });
+
+    while (existingAccountVerificationDocument) {
+      this.emailVerificationToken = generateEmailVerificationToken();
+
+      // eslint-disable-next-line no-await-in-loop
+      existingAccountVerificationDocument = await AccountVerification.findOne({
+        emailVerificationToken: this.emailVerificationToken
+      });
     }
   }
 );
