@@ -1,38 +1,56 @@
 {
-  "name": "auth",
+  "name": "Destur",
   "version": "1.0.0",
   "description": "Destur",
   "main": "./src/index.ts",
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "prettier": "prettier --check ./src/**/*.ts",
-    "prettier:fix": "prettier --fix ./src/**/*.ts",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write .",
     "start:dev": "nodemon src/index.ts",
-    "start": "",
-    "test": "jest"
+    "start": "set NODE_ENV=production && ts-node src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --verbose --watchAll --no-cache --runInBand",
+    "tsc:check": "tesc --noEmit"
   },
   "jest": {
     "testEnvironment": "node",
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "setupFilesAfterEnv": [
+      "./src/test-utils/setup-after-env.ts"
+    ]
   },
   "keywords": [],
   "author": "Anlerkan",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^6.10.0",
+    "mongodb-memory-server": "^6.9.6",
+    "mongoose": "^5.12.2",
+    "nodemailer": "^6.5.0",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
   "devDependencies": {
+    "@types/dotenv-safe": "^8.1.1",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.22",
+    "@types/mongoose": "^5.10.4",
     "@types/node": "^14.14.37",
+    "@types/nodemailer": "^6.4.1",
     "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
     "eslint": "^7.23.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-airbnb-typescript-prettier": "^4.2.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "husky": "4.3.0",
     "jest": "^25.5.4",
     "lint-staged": "^10.5.4",
@@ -49,7 +67,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && npm run test"
     }
   }
 }
