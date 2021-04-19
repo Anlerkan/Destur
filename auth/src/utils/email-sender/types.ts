@@ -1,5 +1,13 @@
+export type EmailApiSendSignupVerificationEmailArgs = {
+  toEmail: string;
+  emailVerificationToken: string;
+};
+
 export type EmailApiSendEmailArgs = {
   toEmail: string;
+  subject: string;
+  textBody: string;
+  htmlBody: string;
 };
 
 export type EmailApiSendEmailResponse = {
@@ -19,7 +27,9 @@ export type SmptServerConfig = {
 };
 
 export interface EmailApi {
-  sendSignupVerificationEmail(args: EmailApiSendEmailArgs): Promise<EmailApiSendEmailResponse>;
+  sendSignupVerificationEmail(
+    args: EmailApiSendSignupVerificationEmailArgs
+  ): Promise<EmailApiSendEmailResponse>;
 }
 
 export interface SmptServer {

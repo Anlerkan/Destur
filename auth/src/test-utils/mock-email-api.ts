@@ -1,7 +1,7 @@
 import {
   EmailApi,
-  EmailApiSendEmailArgs,
-  EmailApiSendEmailResponse
+  EmailApiSendEmailResponse,
+  EmailApiSendSignupVerificationEmailArgs
 } from '../utils/email-sender/types';
 
 export const mockSendSignupVerificationEmail = jest.fn(
@@ -12,7 +12,7 @@ export const mockSendSignupVerificationEmail = jest.fn(
 export class MockEmailApi implements EmailApi {
   sendSignupVerificationEmail({
     toEmail
-  }: EmailApiSendEmailArgs): Promise<EmailApiSendEmailResponse> {
+  }: EmailApiSendSignupVerificationEmailArgs): Promise<EmailApiSendEmailResponse> {
     return mockSendSignupVerificationEmail(toEmail);
   }
 }

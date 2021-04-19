@@ -59,7 +59,7 @@ signUpRouter.post(
     const newUser = await User.create({ email, password });
     const emailVerificationToken = generateEmailVerificationToken();
 
-    await AccountVerification.create({
+    const accountVerification = await AccountVerification.create({
       userId: newUser._id,
       emailVerificationToken
     });
@@ -68,7 +68,8 @@ signUpRouter.post(
     const emailSender = EmailSender.getInstance();
 
     emailSender.sendSignupVerificationEmail({
-      toEmail: newUser.email
+      toEmail: newUser.email,
+      emailVerificationToken: accountVerification.emailVerificationToken
     });
 
     return res.status(userSignedUpEvent.getStatusCode()).send(userSignedUpEvent.serializeRest());

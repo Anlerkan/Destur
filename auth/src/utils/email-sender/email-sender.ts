@@ -1,4 +1,8 @@
-import { EmailApi, EmailApiSendEmailArgs, EmailApiSendEmailResponse } from './types';
+import {
+  EmailApi,
+  EmailApiSendEmailResponse,
+  EmailApiSendSignupVerificationEmailArgs
+} from './types';
 
 export default class EmailSender implements EmailApi {
   private isActive = false;
@@ -34,7 +38,7 @@ export default class EmailSender implements EmailApi {
   }
 
   async sendSignupVerificationEmail(
-    args: EmailApiSendEmailArgs
+    args: EmailApiSendSignupVerificationEmailArgs
   ): Promise<EmailApiSendEmailResponse> {
     this.validateEmailSender();
 

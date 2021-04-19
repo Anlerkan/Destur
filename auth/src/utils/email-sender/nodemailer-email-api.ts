@@ -1,8 +1,16 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
-import { EmailApiSendEmailArgs, EmailApiSendEmailResponse, EmailApi } from './types';
+import {
+  EmailApiSendEmailArgs,
+  EmailApiSendEmailResponse,
+  EmailApi,
+  EmailApiSendSignupVerificationEmailArgs
+} from './types';
 import NodeMailerAppSmtpServer from './nodemailer-smtp-server';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { name: projectName } = require('../../../package.json');
 
 export default class NodemailerEmailApi implements EmailApi {
   private transporter: Mail;
@@ -12,12 +20,21 @@ export default class NodemailerEmailApi implements EmailApi {
   }
 
   async sendSignupVerificationEmail(
-    args: EmailApiSendEmailArgs
+    args: EmailApiSendSignupVerificationEmailArgs
   ): Promise<EmailApiSendEmailResponse> {
-    const { toEmail } = args;
+    const { toEmail, emailVerificationToken } = args;
+
+    const emailVerificationLink = this.buildSignupEmailVerificationLink(emailVerificationToken);
+
+    const subject = `Welcome to ${projectName}! Please verify your email adress`;
+    const textBody = this.buildSignupVerificationEmailTextBody(emailVerificationLink);
+    const htmlBody = this.buildSignupVerificationEmailHtmlBody(emailVerificationLink);
 
     await this.sendEmail({
-      toEmail
+      toEmail,
+      subject,
+      textBody,
+      htmlBody
     });
 
     return {
@@ -27,13 +44,33 @@ export default class NodemailerEmailApi implements EmailApi {
   }
 
   private async sendEmail(args: EmailApiSendEmailArgs): Promise<void> {
-    const { toEmail } = args;
+    const { toEmail, subject, htmlBody, textBody } = args;
 
     await this.transporter.sendMail({
-      from: 'Destur <noreply@destur.com>',
+      from: `${projectName} <noreply@${projectName}.com>`,
       to: toEmail,
-      subject: 'My first email',
-      text: 'This is first test email'
+      subject,
+      text: textBody,
+      html: htmlBody
     });
+  }
+
+  private buildSignupVerificationEmailTextBody(emailVerificationLink: string): string {
+    return `Welcome to ${projectName}! Please click on the link below (or copy it to your browser) to verify your email address.${emailVerificationLink}`;
+  }
+
+  private buildSignupVerificationEmailHtmlBody(emailVerificationLink: string): string {
+    return `<h1>Welcome to ${projectName}</h1>
+    <br/>
+    Please click on the link below (or copy it to your browser) to verify your email address.
+    <br/>
+    <br/>
+    <a href="${emailVerificationLink}">${emailVerificationLink}</a>`;
+  }
+
+  private buildSignupEmailVerificationLink(emailVerificationToken: string): string {
+    //  TO-DO: this URL should change
+
+    return `http://localhost:3000/api/auth/verify/${emailVerificationToken}`;
   }
 }
