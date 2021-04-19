@@ -2,7 +2,7 @@ import request from 'supertest';
 
 import app from '../../app';
 import { SIGNUP_ROUTE } from '../signup';
-import { User } from '../../models';
+import { User, AccountVerification } from '../../models';
 import { EmailSender } from '../../utils';
 import { MockEmailApi, mockSendSignupVerificationEmail } from '../../test-utils/mock-email-api';
 
@@ -159,5 +159,20 @@ describe('tests the email verification behavior on signup', () => {
   it('triggers the sendSignupVerificationEmail method from the EmailSender', async () => {
     await request(app).post(SIGNUP_ROUTE).send(validUserInfo).expect(201);
     expect(mockSendSignupVerificationEmail).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('tests creating the email verification token on signup', () => {
+  it('should create an AccountVerification entity on succcessful signup', async () => {
+    const response = await request(app)
+      .post(SIGNUP_ROUTE)
+      .send({ email: 'test@test.com', password: 'Valid123' })
+      .expect(201);
+
+    const accountVerification = await AccountVerification.findOne({
+      userId: response.body.id
+    });
+
+    expect(accountVerification).not.toBeNull();
   });
 });

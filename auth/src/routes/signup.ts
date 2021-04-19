@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { User } from '../models';
-import { InvalidInput, DuplicatedEmail } from '../errors';
+import { User, AccountVerification } from '../models';
+import { InvalidInput } from '../errors';
 import { UserSignedUp } from '../events';
 import { EmailSender } from '../utils';
+import { generateEmailVerificationToken } from '../utils/account-verification';
 
 export const SIGNUP_ROUTE = '/api/auth/signup/';
 
@@ -55,19 +56,22 @@ signUpRouter.post(
 
     const { email, password } = req.body;
 
-    try {
-      const newUser = await User.create({ email, password });
-      const userSignedUpEvent = new UserSignedUp(newUser);
-      const emailSender = EmailSender.getInstance();
+    const newUser = await User.create({ email, password });
+    const emailVerificationToken = generateEmailVerificationToken();
 
-      emailSender.sendSignupVerificationEmail({
-        toEmail: newUser.email
-      });
+    await AccountVerification.create({
+      userId: newUser._id,
+      emailVerificationToken
+    });
 
-      return res.status(userSignedUpEvent.getStatusCode()).send(userSignedUpEvent.serializeRest());
-    } catch (e) {
-      throw new DuplicatedEmail();
-    }
+    const userSignedUpEvent = new UserSignedUp(newUser);
+    const emailSender = EmailSender.getInstance();
+
+    emailSender.sendSignupVerificationEmail({
+      toEmail: newUser.email
+    });
+
+    return res.status(userSignedUpEvent.getStatusCode()).send(userSignedUpEvent.serializeRest());
   }
 );
 
