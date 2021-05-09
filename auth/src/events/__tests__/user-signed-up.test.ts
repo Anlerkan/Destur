@@ -1,7 +1,7 @@
 import { User } from '../../models';
 import UserSignedUp from '../user-signed-up';
 
-it('should expose only the id and the emal when serializing to REST', async () => {
+it('should expose only the id and the email when serializing to REST', async () => {
   const newUser = await User.create({ email: 'test@test.com', password: 'Valid123' });
   const userSignedUpEvent = new UserSignedUp(newUser);
   const serializedResponse = userSignedUpEvent.serializeRest();

@@ -3,7 +3,7 @@ import { json } from 'body-parser';
 import 'express-async-errors';
 import cors from 'cors';
 
-import { signUpRouter } from './routes';
+import { signUpRouter, verifyRouter } from './routes';
 import { errorHandler } from './middlewares';
 
 const app = express();
@@ -18,7 +18,10 @@ const options: cors.CorsOptions = {
 
 app.use(cors(options));
 app.use(json());
+
 app.use(signUpRouter);
+app.use(verifyRouter);
+
 app.use(errorHandler);
 
 export default app;

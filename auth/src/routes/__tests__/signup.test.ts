@@ -1,10 +1,10 @@
 import request from 'supertest';
 
 import app from '../../app';
-import { SIGNUP_ROUTE } from '../signup';
 import { User, AccountVerification } from '../../models';
 import { EmailSender } from '../../utils';
 import { MockEmailApi, mockSendSignupVerificationEmail } from '../../test-utils/mock-email-api';
+import { SIGNUP_ROUTE } from '../route-defs';
 
 // it('should return a 405 for non-post request to the signup route', () => {
 

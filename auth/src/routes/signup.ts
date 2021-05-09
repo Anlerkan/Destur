@@ -5,8 +5,7 @@ import { InvalidInput } from '../errors';
 import { UserSignedUp } from '../events';
 import { EmailSender } from '../utils';
 import { generateEmailVerificationToken } from '../utils/account-verification';
-
-export const SIGNUP_ROUTE = '/api/auth/signup/';
+import { SIGNUP_ROUTE } from './route-defs';
 
 const signUpRouter = express.Router();
 
