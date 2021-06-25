@@ -13,7 +13,7 @@ function validateToken(req: Request, res: Response, next: NextFunction): Respons
 
   if (req.cookies && req.cookies['access-token']) {
     try {
-      const validToken = verify(req.cookies['access-token'], 'jwtSecret');
+      const validToken = verify(req.cookies['access-token'], process.env.SESSION_TOKEN_SECRET!);
 
       if (validToken) {
         return next();

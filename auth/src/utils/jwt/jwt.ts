@@ -9,7 +9,9 @@ export default class Jwt {
   static createToken(args: CreateTokenArgs): string {
     const { user } = args;
 
-    const accessToken = sign({ id: user._id }, 'jwtSecret', { expiresIn: '2days' });
+    const accessToken = sign({ id: user._id }, process.env.SESSION_TOKEN_SECRET!, {
+      expiresIn: '2days'
+    });
 
     return accessToken;
   }
