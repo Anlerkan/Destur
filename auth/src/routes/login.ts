@@ -37,8 +37,19 @@ loginRouter.post(
       errors.push({
         location: 'body',
         value: email,
-        param: 'password',
+        param: 'email',
         msg: 'User was not found.'
+      });
+
+      throw new InvalidInput(errors);
+    }
+
+    if (!user.isVerified) {
+      errors.push({
+        location: 'body',
+        value: email,
+        param: 'email',
+        msg: 'User is not verified.'
       });
 
       throw new InvalidInput(errors);
