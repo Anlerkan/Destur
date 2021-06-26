@@ -2,6 +2,7 @@ import { BaseAuthEvent } from './base-auth-event';
 import { UserDocument } from '../models/User';
 
 export type UserLoggedInRestPayload = {
+  id: string;
   status: string;
 };
 
@@ -21,6 +22,7 @@ export default class UserLoggedIn extends BaseAuthEvent<UserLoggedInRestPayload>
 
   serializeRest(): UserLoggedInRestPayload {
     return {
+      id: this.user._id,
       status: 'Success'
     };
   }
